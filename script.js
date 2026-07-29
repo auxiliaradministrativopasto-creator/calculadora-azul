@@ -1,9 +1,17 @@
-// Inicializar Supabase
-const supabaseUrl = 'https://tusttpletrhfmuicmluv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1c3R0cGxldHJoZm11aWNtbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyNzg0ODQsImV4cCI6MjEwMDg1NDQ4NH0.7HLlQL6bQTzUfwccthDYiuihZ2xlscD8CbdS1XtxCMg'; 
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-console.log("Supabase inicializado:", supabaseClient);
+// Inicializar Supabase de forma segura
+let supabaseClient = null;
+try {
+    if (window.supabase) {
+        const supabaseUrl = 'https://tusttpletrhfmuicmluv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1c3R0cGxldHJoZm11aWNtbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyNzg0ODQsImV4cCI6MjEwMDg1NDQ4NH0.7HLlQL6bQTzUfwccthDYiuihZ2xlscD8CbdS1XtxCMg'; 
+        supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        console.log("Supabase inicializado:", supabaseClient);
+    } else {
+        console.warn("Supabase no pudo ser cargado (posible bloqueador de anuncios o error de red). La calculadora funcionará sin conexión a la base de datos.");
+    }
+} catch (error) {
+    console.error("Error al inicializar Supabase:", error);
+}
 
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
