@@ -1,9 +1,9 @@
 // Inicializar Supabase
 const supabaseUrl = 'https://tusttpletrhfmuicmluv.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1c3R0cGxldHJoZm11aWNtbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyNzg0ODQsImV4cCI6MjEwMDg1NDQ4NH0.7HLlQL6bQTzUfwccthDYiuihZ2xlscD8CbdS1XtxCMg'; 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-console.log("Supabase inicializado:", supabase);
+console.log("Supabase inicializado:", supabaseClient);
 
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
@@ -83,9 +83,9 @@ class Calculator {
     }
 
     async saveHistory(record) {
-        if (!supabase) return;
+        if (!supabaseClient) return;
         try {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('historial')
                 .insert([{ operacion: record }]);
             
