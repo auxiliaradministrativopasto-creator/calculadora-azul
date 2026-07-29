@@ -1,3 +1,10 @@
+// Inicializar Supabase
+const supabaseUrl = 'https://tusttpletrhfmuicmluv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1c3R0cGxldHJoZm11aWNtbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyNzg0ODQsImV4cCI6MjEwMDg1NDQ4NH0.7HLlQL6bQTzUfwccthDYiuihZ2xlscD8CbdS1XtxCMg'; 
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+console.log("Supabase inicializado:", supabase);
+
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
         this.previousOperandTextElement = previousOperandTextElement;
@@ -66,9 +73,30 @@ class Calculator {
             default:
                 return;
         }
+
+        const record = `${prev} ${this.operation} ${current} = ${computation}`;
+        this.saveHistory(record);
+
         this.currentOperand = computation;
         this.operation = undefined;
         this.previousOperand = '';
+    }
+
+    async saveHistory(record) {
+        if (!supabase) return;
+        try {
+            const { error } = await supabase
+                .from('historial')
+                .insert([{ operacion: record }]);
+            
+            if (error) {
+                console.error("Error guardando en Supabase:", error.message);
+            } else {
+                console.log("Historial guardado en la nube:", record);
+            }
+        } catch (err) {
+            console.error("Error de conexión:", err);
+        }
     }
 
     getDisplayNumber(number) {
